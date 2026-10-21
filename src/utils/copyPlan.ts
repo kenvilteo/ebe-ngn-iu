@@ -4,7 +4,7 @@ import { formatReadableDate, formatTime } from "./dateFormat";
 
 export function buildCopiedPlan(plan: DatePlan): string {
   const name = plan.recipientName?.trim() || "em";
-  const date = plan.date ? formatReadableDate(plan.date) : "một ngày nào đó";
+  const date = plan.date ? formatReadableDate(plan.date) : "Một ngày nào đó";
   const time = plan.time ? formatTime(plan.time) : "giờ nào cũng được";
   const activity = findActivity(plan.activity);
   const activityLine = activity ? `${activity.emoji} ${activity.title}` : "—";

@@ -100,7 +100,7 @@ export default function EncouragePage() {
           to="/love"
           className="underline decoration-dotted underline-offset-2 transition hover:text-raspberry"
         >
-          chuyện của hai đứa mình 💗
+          Chuyện của hai đứa mình 💗
         </RouteLink>
       </footer>
     </>

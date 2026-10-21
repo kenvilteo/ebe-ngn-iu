@@ -88,7 +88,7 @@ export default function ProgressHearts({
               onClick={() => setShowSecret(false)}
               className="mt-2 min-h-[36px] rounded-full px-4 text-sm font-semibold text-raspberry hover:bg-raspberry-soft"
             >
-              suỵt 🤫
+              Suỵt 🤫
             </button>
           </motion.div>
         )}

@@ -12,7 +12,7 @@ export default function DateTimeStep() {
 
   return (
     <div className="flex min-h-[68dvh] flex-col items-center justify-center">
-      <p className="text-xs font-semibold uppercase tracking-[0.28em] text-blush">bước 1 — ngày và giờ</p>
+      <p className="text-xs font-semibold uppercase tracking-[0.28em] text-blush">Bước 1 — Ngày và giờ</p>
       <h2 className="mt-2 text-center font-display text-4xl text-ink sm:text-5xl">Em rảnh hôm nào?</h2>
 
       <div className="mt-8 w-full rounded-3xl border border-[#F3E6EC] bg-white p-5 shadow-card sm:p-7">
@@ -29,7 +29,7 @@ export default function DateTimeStep() {
         />
         {plan.date && !dateValid && (
           <p className="mt-2 text-sm text-raspberry" role="alert">
-            ngày đó qua rồi — chọn ngày sau đi em 🥺
+            Ngày đó qua rồi — chọn ngày sau đi em 🥺
           </p>
         )}
 
@@ -83,7 +83,7 @@ export default function DateTimeStep() {
           onClick={back}
           className="min-h-[48px] rounded-full px-5 font-medium text-muted hover:text-raspberry"
         >
-          ← quay lại
+          ← Quay lại
         </button>
         <button
           type="button"
@@ -91,7 +91,7 @@ export default function DateTimeStep() {
           disabled={!ready}
           className="min-h-[52px] rounded-full bg-raspberry px-8 font-semibold text-white shadow-soft hover:bg-raspberry-dark disabled:cursor-not-allowed disabled:opacity-40"
         >
-          tiếp →
+          Tiếp →
         </button>
       </div>
     </div>

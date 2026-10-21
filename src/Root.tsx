@@ -6,12 +6,12 @@ import EncouragePage from "./pages/EncouragePage";
 import LovePage from "./pages/LovePage";
 import { RouteLink, useRoute } from "./router";
 
-const LOVE_TITLE = "chuyện của hai đứa mình 💗";
+const LOVE_TITLE = "Chuyện của hai đứa mình 💗";
 
 const TITLES: Record<string, string> = {
   "/": LOVE_TITLE,
   "/love": LOVE_TITLE,
-  "/meomeo1": "nghỉ tay một chút đi 💌",
+  "/meomeo1": "Nghỉ tay một chút đi 💌",
   "/date": "Hẹn hò với anh nhé? 💖",
 };
 
@@ -21,13 +21,13 @@ function NotFound() {
       <p className="text-5xl" aria-hidden="true">
         🫥
       </p>
-      <h1 className="mt-4 font-display text-3xl text-ink">không có gì ở đây hết</h1>
-      <p className="mt-2 text-sm text-muted">chắc gõ nhầm đường dẫn rồi.</p>
+      <h1 className="mt-4 font-display text-3xl text-ink">Không có gì ở đây hết</h1>
+      <p className="mt-2 text-sm text-muted">Chắc gõ nhầm đường dẫn rồi.</p>
       <RouteLink
         to="/"
         className="mt-6 rounded-full bg-raspberry px-6 py-3 text-sm font-semibold text-white shadow-soft transition hover:bg-raspberry-dark"
       >
-        về trang chính
+        Về trang chính
       </RouteLink>
     </main>
   );

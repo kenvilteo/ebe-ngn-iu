@@ -13,7 +13,7 @@ export default function NextMilestone({ next, previous, now }: Props) {
   if (!next) {
     return (
       <section className="mt-8 rounded-3xl bg-raspberry-soft px-5 py-6 text-center shadow-soft">
-        <p className="text-sm text-muted">hết mốc để đếm rồi. vào config thêm nữa đi 😌</p>
+        <p className="text-sm text-muted">Hết mốc để đếm rồi. Vào config thêm nữa đi 😌</p>
       </section>
     );
   }
@@ -32,12 +32,12 @@ export default function NextMilestone({ next, previous, now }: Props) {
   return (
     <section className="mt-8 rounded-3xl bg-raspberry-soft px-5 py-6 shadow-soft">
       <p className="text-center text-[11px] font-semibold uppercase tracking-[0.22em] text-raspberry">
-        kỷ niệm sắp tới
+        Kỷ niệm sắp tới
       </p>
 
       {next.isToday ? (
         <p className="mt-3 text-center font-display text-3xl text-raspberry">
-          {next.emoji} hôm nay là {next.title} đấy 🎉
+          {next.emoji} Hôm nay là {next.title} đấy 🎉
         </p>
       ) : (
         <>
@@ -68,7 +68,7 @@ export default function NextMilestone({ next, previous, now }: Props) {
             />
           </div>
           <p className="mt-2 text-center text-xs text-muted">
-            từ {previous.title} tới {next.title} — đi được {Math.round(percent)}% rồi
+            Từ {previous.title} tới {next.title} — đi được {Math.round(percent)}% rồi
           </p>
         </div>
       )}

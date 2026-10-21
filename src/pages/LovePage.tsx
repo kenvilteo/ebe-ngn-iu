@@ -56,14 +56,14 @@ export default function LovePage() {
           to="/meomeo1"
           className="underline decoration-dotted underline-offset-2 transition hover:text-raspberry"
         >
-          còn một chỗ nữa nè 💌
+          Còn một chỗ nữa nè 💌
         </RouteLink>
         <span className="mx-2 opacity-60">·</span>
         <RouteLink
           to="/date"
           className="underline decoration-dotted underline-offset-2 transition hover:text-raspberry"
         >
-          gửi lời mời hẹn hò 💗
+          Gửi lời mời hẹn hò 💗
         </RouteLink>
       </footer>
     </>

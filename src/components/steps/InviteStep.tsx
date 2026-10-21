@@ -110,7 +110,7 @@ export default function InviteStep() {
             Thôi được rồi 😭
             <br />Anh phải thử thôi.
           </h1>
-          <p className="mt-4 text-muted">trang này sẽ tự huỷ sau... không bao giờ. nó ở đây luôn.</p>
+          <p className="mt-4 text-muted">Trang này sẽ tự huỷ sau... không bao giờ. Nó ở đây luôn.</p>
           <button
             type="button"
             onClick={() => {
@@ -121,7 +121,7 @@ export default function InviteStep() {
             }}
             className="mt-8 min-h-[48px] rounded-full bg-raspberry px-7 font-semibold text-white shadow-soft transition hover:bg-raspberry-dark"
           >
-            đổi ý rồi 💗
+            Đổi ý rồi 💗
           </button>
         </motion.div>
       </div>
@@ -133,7 +133,7 @@ export default function InviteStep() {
       <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-[480px]">
         <EnvelopeArt />
         <p className="mt-5 text-xs font-semibold uppercase tracking-[0.28em] text-blush">
-          một câu hỏi nhỏ
+          Một câu hỏi nhỏ
         </p>
         <h1 className="mt-2 font-display text-[2.6rem] leading-[1.08] text-ink sm:text-5xl">
           {heading}
@@ -168,7 +168,7 @@ export default function InviteStep() {
           </motion.button>
         </div>
 
-        <p className="mt-2 text-xs text-[#B9A6B0]">chọn khôn ngoan vào. chỉ một cái đúng thôi.</p>
+        <p className="mt-2 text-xs text-[#B9A6B0]">Chọn khôn ngoan vào. Chỉ một cái đúng thôi.</p>
       </motion.div>
 
       <AnimatePresence>

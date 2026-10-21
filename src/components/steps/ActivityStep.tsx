@@ -8,9 +8,9 @@ export default function ActivityStep() {
 
   return (
     <div className="flex min-h-[68dvh] flex-col items-center justify-center">
-      <p className="text-xs font-semibold uppercase tracking-[0.28em] text-blush">bước 2 — mình đi đâu</p>
+      <p className="text-xs font-semibold uppercase tracking-[0.28em] text-blush">Bước 2 — Mình đi đâu</p>
       <h2 className="mt-2 text-center font-display text-4xl text-ink sm:text-5xl">Em muốn đi đâu?</h2>
-      <p className="mt-2 text-center italic text-muted">chọn một cái thôi, còn lại để anh lo 😌</p>
+      <p className="mt-2 text-center italic text-muted">Chọn một cái thôi, còn lại để anh lo 😌</p>
 
       <div
         className="mt-8 grid w-full grid-cols-1 gap-3 sm:grid-cols-2"
@@ -54,7 +54,7 @@ export default function ActivityStep() {
           onClick={back}
           className="min-h-[48px] rounded-full px-5 font-medium text-muted hover:text-raspberry"
         >
-          ← quay lại
+          ← Quay lại
         </button>
         <button
           type="button"
@@ -62,7 +62,7 @@ export default function ActivityStep() {
           disabled={!selected}
           className="min-h-[52px] rounded-full bg-raspberry px-8 font-semibold text-white shadow-soft hover:bg-raspberry-dark disabled:cursor-not-allowed disabled:opacity-40"
         >
-          tiếp →
+          Tiếp →
         </button>
       </div>
     </div>

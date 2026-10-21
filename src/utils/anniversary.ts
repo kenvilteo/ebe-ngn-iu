@@ -167,10 +167,10 @@ export function formatVnDate(iso: string): string {
 }
 
 export function relativeDayLabel(daysUntil: number): string {
-  if (daysUntil === 0) return "hôm nay";
-  if (daysUntil === 1) return "ngày mai";
-  if (daysUntil === -1) return "hôm qua";
-  if (daysUntil > 1) return `còn ${daysUntil} ngày`;
+  if (daysUntil === 0) return "Hôm nay";
+  if (daysUntil === 1) return "Ngày mai";
+  if (daysUntil === -1) return "Hôm qua";
+  if (daysUntil > 1) return `Còn ${daysUntil} ngày`;
 
   const ago = -daysUntil;
   if (ago < 14) return `${ago} ngày trước`;

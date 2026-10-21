@@ -38,13 +38,13 @@ export default function App() {
         <StepContainer key={step}>{renderStep(step)}</StepContainer>
       </AnimatePresence>
       <footer className="pb-6 text-center text-xs text-[#C2ADB7]">
-        làm vội trong một buổi tối, nhưng là làm cho em 💗
+        Làm vội trong một buổi tối, nhưng là làm cho em 💗
         <span className="mx-2 opacity-60">·</span>
         <RouteLink
           to="/love"
           className="underline decoration-dotted underline-offset-2 transition hover:text-raspberry"
         >
-          chuyện của hai đứa mình
+          Chuyện của hai đứa mình
         </RouteLink>
       </footer>
     </>

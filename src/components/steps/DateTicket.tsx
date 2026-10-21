@@ -142,7 +142,7 @@ export default function DateTicket() {
 
   return (
     <div className="flex min-h-[68dvh] flex-col items-center">
-      <p className="text-xs font-semibold uppercase tracking-[0.28em] text-blush">bước cuối — chốt kèo</p>
+      <p className="text-xs font-semibold uppercase tracking-[0.28em] text-blush">Bước cuối — Chốt kèo</p>
       <h2 className="mt-2 text-center font-display text-4xl text-ink sm:text-5xl">Chốt nhé! 💌</h2>
       <p className="mt-2 text-center italic text-muted">{note}</p>
 
@@ -153,29 +153,29 @@ export default function DateTicket() {
         className="paper-texture mt-7 w-full overflow-hidden rounded-[26px] border border-[#F0E2E8] bg-white shadow-card-hover"
       >
         <div className="bg-raspberry px-6 py-4 text-center">
-          <p className="text-xs font-bold uppercase tracking-[0.32em] text-white/85">vé hẹn hò</p>
+          <p className="text-xs font-bold uppercase tracking-[0.32em] text-white/85">Vé hẹn hò</p>
         </div>
 
         <div className="px-6 py-6 sm:px-8">
           <div className="grid grid-cols-2 gap-x-4 gap-y-5">
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted">dành cho</p>
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted">Dành cho</p>
               <p className="mt-1 font-display text-2xl text-ink">{recipient}</p>
             </div>
             <div className="text-right">
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted">hoạt động</p>
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted">Hoạt động</p>
               <p className="mt-1 text-lg font-bold text-ink">
                 {activity ? `${activity.emoji} ${activity.title}` : "—"}
               </p>
             </div>
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted">ngày</p>
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted">Ngày</p>
               <p className="mt-1 font-semibold text-ink">
                 {plan.date ? formatReadableDate(plan.date) : "—"}
               </p>
             </div>
             <div className="text-right">
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted">giờ</p>
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted">Giờ</p>
               <p className="mt-1 font-semibold text-ink">
                 {plan.time ? formatTime(plan.time) : "—"}
               </p>
@@ -199,7 +199,7 @@ export default function DateTicket() {
 
           <div className="flex items-center justify-between gap-3">
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted">trạng thái</p>
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted">Trạng thái</p>
               <p className="mt-1 font-bold text-ink">
                 {status === "done" ? (
                   <span className="inline-flex items-center gap-1.5 text-raspberry">
@@ -213,7 +213,7 @@ export default function DateTicket() {
             <div className="text-right">
               <div
                 className="font-mono text-sm tracking-[0.3em] text-muted"
-                aria-label="mã vạch trang trí của vé"
+                aria-label="Mã vạch trang trí của vé"
               >
                 {"▌▌▌ ▌ ▌▌ ▌▌▌ ▌"}
               </div>
@@ -227,7 +227,7 @@ export default function DateTicket() {
         {status === "done" ? (
           <div className="rounded-2xl bg-raspberry-soft/70 px-5 py-4 text-center font-semibold text-raspberry">
             {alreadySubmitted && status === "done" ? "Đã chốt rồi 💖" : "Chốt kèo thành công 💖"}
-            <span className="mt-1 block text-sm font-normal">kế hoạch đã được gửi đi ✨</span>
+            <span className="mt-1 block text-sm font-normal">Kế hoạch đã được gửi đi ✨</span>
           </div>
         ) : (
           <button
@@ -283,7 +283,7 @@ export default function DateTicket() {
             onClick={back}
             className="min-h-[50px] rounded-full border border-[#E5CBD6] bg-white px-5 font-medium text-muted hover:text-raspberry"
           >
-            ← sửa
+            ← Sửa
           </button>
         </div>
       </div>
@@ -301,12 +301,12 @@ export default function DateTicket() {
             onClick={() => setConfirmReset(true)}
             className="inline-flex min-h-[44px] items-center gap-1.5 px-4 text-sm text-[#B9A6B0] hover:text-raspberry"
           >
-            <RotateCcw size={14} /> làm lại từ đầu
+            <RotateCcw size={14} /> Làm lại từ đầu
           </button>
         ) : (
           <div className="rounded-2xl border border-[#EDD7DF] bg-white px-5 py-4">
             <p className="text-sm text-muted">
-              làm lại từ đầu? chỉ đặt lại trên trình duyệt này thôi — kế hoạch đã gửi vẫn ở đó 💌
+              Làm lại từ đầu? Chỉ đặt lại trên trình duyệt này thôi — kế hoạch đã gửi vẫn ở đó 💌
             </p>
             <div className="mt-3 flex justify-center gap-2">
               <button
@@ -317,14 +317,14 @@ export default function DateTicket() {
                 }}
                 className="min-h-[44px] rounded-full bg-raspberry px-5 text-sm font-semibold text-white"
               >
-                ừ, làm lại
+                Ừ, làm lại
               </button>
               <button
                 type="button"
                 onClick={() => setConfirmReset(false)}
                 className="min-h-[44px] rounded-full border border-[#E5CBD6] px-5 text-sm font-medium text-muted"
               >
-                giữ nguyên
+                Giữ nguyên
               </button>
             </div>
           </div>

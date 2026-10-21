@@ -16,13 +16,13 @@ export default function ActivityDetailStep() {
     return (
       <div className="flex min-h-[68dvh] flex-col items-center justify-center text-center">
         <p className="text-4xl">🤔</p>
-        <p className="mt-3 text-muted">chưa chọn hoạt động. quay lại chọn một cái nhé.</p>
+        <p className="mt-3 text-muted">Chưa chọn hoạt động. Quay lại chọn một cái nhé.</p>
         <button
           type="button"
           onClick={back}
           className="mt-5 min-h-[48px] rounded-full bg-raspberry px-6 font-semibold text-white"
         >
-          ← quay lại
+          ← Quay lại
         </button>
       </div>
     );
@@ -35,13 +35,13 @@ export default function ActivityDetailStep() {
   return (
     <div className="flex min-h-[68dvh] flex-col items-center justify-center">
       <p className="text-xs font-semibold uppercase tracking-[0.28em] text-blush">
-        bước 3 — nói anh nghe
+        Bước 3 — Nói anh nghe
       </p>
       <h2 className="mt-2 text-center font-display text-4xl text-ink sm:text-5xl">
         {activity.detailLabel}
       </h2>
       <p className="mt-2 text-center italic text-muted">
-        ghi gì cũng được, anh chuẩn bị trước 😌
+        Ghi gì cũng được, anh chuẩn bị trước 😌
       </p>
 
       <motion.div
@@ -86,7 +86,7 @@ export default function ActivityDetailStep() {
           onClick={back}
           className="min-h-[48px] rounded-full px-5 font-medium text-muted hover:text-raspberry"
         >
-          ← quay lại
+          ← Quay lại
         </button>
         <button
           type="button"
@@ -94,7 +94,7 @@ export default function ActivityDetailStep() {
           disabled={!ready}
           className="min-h-[52px] rounded-full bg-raspberry px-8 font-semibold text-white shadow-soft hover:bg-raspberry-dark disabled:cursor-not-allowed disabled:opacity-40"
         >
-          tiếp →
+          Tiếp →
         </button>
       </div>
     </div>

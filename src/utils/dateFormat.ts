@@ -79,16 +79,16 @@ export function generateTicketNumber(dateStr: string): string {
 export function timeNote(timeStr: string): string {
   switch (timeStr) {
     case "17:00":
-      return "ăn sớm xong còn kịp đi dạo một vòng.";
+      return "Ăn sớm xong còn kịp đi dạo một vòng.";
     case "18:00":
-      return "giờ này là chuẩn nhất, em chọn đúng rồi.";
+      return "Giờ này là chuẩn nhất, em chọn đúng rồi.";
     case "19:00":
-      return "bữa tối chính thức. anh đói sẵn rồi.";
+      return "Bữa tối chính thức. Anh đói sẵn rồi.";
     case "20:00":
-      return "hơi muộn một chút nhưng anh đợi được.";
+      return "Hơi muộn một chút nhưng anh đợi được.";
     case "21:00":
-      return "ăn khuya cũng là ăn 🌙";
+      return "Ăn khuya cũng là ăn 🌙";
     default:
-      return "chốt rồi nhé, không đổi nữa đâu.";
+      return "Chốt rồi nhé, không đổi nữa đâu.";
   }
 }

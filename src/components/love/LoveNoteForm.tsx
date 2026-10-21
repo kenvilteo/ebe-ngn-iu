@@ -14,13 +14,13 @@ type Status = "idle" | "sending" | "sent" | "error";
 function errorCopy(code: string | null): string {
   switch (code) {
     case "RATE_LIMITED":
-      return "từ từ thôi em 😅 vài phút nữa thử lại nhé";
+      return "Từ từ thôi em 😅 vài phút nữa thử lại nhé";
     case "NETWORK_ERROR":
-      return "mất mạng rồi 🥺 kiểm tra wifi giúp anh";
+      return "Mất mạng rồi 🥺 kiểm tra wifi giúp anh";
     case "EMPTY_MESSAGE":
-      return "chưa gõ gì mà 🙈";
+      return "Chưa gõ gì mà 🙈";
     case "NOT_CONFIGURED":
-      return "anh chưa cài bot Telegram, nhắn kiểu gì cũng không tới 🙈";
+      return "Anh chưa cài bot Telegram, nhắn kiểu gì cũng không tới 🙈";
     default:
       return "Telegram đang dỗi. thử lại phát nữa nhé?";
   }
@@ -94,7 +94,7 @@ function LoveNoteForm() {
           {status === "sending" ? (
             <>
               <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-              đang gửi...
+              Đang gửi...
             </>
           ) : (
             <>
@@ -114,7 +114,7 @@ function LoveNoteForm() {
             exit={{ opacity: 0 }}
             className="mt-3 text-sm font-semibold text-raspberry"
           >
-            gửi rồi nha. anh đọc liền 💗
+            Gửi rồi nha. Anh đọc liền 💗
           </motion.p>
         )}
         {status === "error" && error && (
