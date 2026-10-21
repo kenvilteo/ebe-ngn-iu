@@ -99,7 +99,7 @@ export default function InviteStep() {
   };
 
   const headingName = CONFIG.recipientName.trim();
-  const heading = headingName ? `${headingName}, will you go on a date with me?` : CONFIG.invitation.title;
+  const heading = headingName ? `${headingName}, em có muốn đi hẹn hò với anh không?` : CONFIG.invitation.title;
 
   if (hardNo) {
     return (
@@ -107,10 +107,10 @@ export default function InviteStep() {
         <motion.div initial={{ opacity: 0, scale: 0.94 }} animate={{ opacity: 1, scale: 1 }} className="max-w-[420px]">
           <p className="text-5xl">😭</p>
           <h1 className="mt-4 font-display text-4xl leading-tight text-ink">
-            Okay 😭
-            <br />I had to try.
+            Thôi được rồi 😭
+            <br />Anh phải thử thôi.
           </h1>
-          <p className="mt-4 text-muted">this page will self-destruct in never. it&apos;s staying right here.</p>
+          <p className="mt-4 text-muted">trang này sẽ tự huỷ sau... không bao giờ. nó ở đây luôn.</p>
           <button
             type="button"
             onClick={() => {
@@ -121,7 +121,7 @@ export default function InviteStep() {
             }}
             className="mt-8 min-h-[48px] rounded-full bg-raspberry px-7 font-semibold text-white shadow-soft transition hover:bg-raspberry-dark"
           >
-            changed my mind 💗
+            đổi ý rồi 💗
           </button>
         </motion.div>
       </div>
@@ -133,7 +133,7 @@ export default function InviteStep() {
       <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-[480px]">
         <EnvelopeArt />
         <p className="mt-5 text-xs font-semibold uppercase tracking-[0.28em] text-blush">
-          a tiny question
+          một câu hỏi nhỏ
         </p>
         <h1 className="mt-2 font-display text-[2.6rem] leading-[1.08] text-ink sm:text-5xl">
           {heading}
@@ -149,7 +149,7 @@ export default function InviteStep() {
             transition={{ type: "spring", stiffness: 320, damping: 18 }}
             className="min-h-[60px] rounded-full bg-raspberry px-12 text-xl font-bold text-white shadow-soft transition-colors hover:bg-raspberry-dark disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Yes 💖
+            Đồng ý 💖
           </motion.button>
 
           <motion.button
@@ -162,13 +162,13 @@ export default function InviteStep() {
             animate={reducedMotion ? undefined : { x: noPos.x, y: noPos.y }}
             transition={{ type: "spring", stiffness: 500, damping: 22 }}
             className="mt-4 min-h-[44px] min-w-[120px] rounded-full border border-[#E5CBD6] bg-white/80 px-6 text-[15px] font-medium text-muted transition-colors hover:border-blush hover:text-raspberry"
-            aria-label={attempts > 0 ? `No. Attempt ${attempts + 1}. This button is being playful.` : "No"}
+            aria-label={attempts > 0 ? `Không. Lần thử ${attempts + 1}. Nút này đang trêu thôi.` : "Không"}
           >
             {NO_BUTTON_TEXTS[Math.min(attempts, NO_BUTTON_TEXTS.length - 1)]}
           </motion.button>
         </div>
 
-        <p className="mt-2 text-xs text-[#B9A6B0]">choose wisely. one of these is correct.</p>
+        <p className="mt-2 text-xs text-[#B9A6B0]">chọn khôn ngoan vào. chỉ một cái đúng thôi.</p>
       </motion.div>
 
       <AnimatePresence>
@@ -190,11 +190,11 @@ export default function InviteStep() {
             >
               <p className="text-4xl">😔</p>
               <h2 id="denied-title" className="mt-3 font-display text-3xl text-ink">
-                Request denied 😔
+                Đơn bị từ chối 😔
               </h2>
               <p className="mt-3 leading-relaxed text-muted">
-                Your application to cancel this date has been rejected. Please reconsider within 3–5
-                business seconds.
+                Yêu cầu huỷ buổi hẹn của em đã bị anh bác bỏ. Em vui lòng suy nghĩ lại trong 3–5
+                giây làm việc.
               </p>
               <div className="mt-6 flex flex-col gap-2">
                 <button
@@ -206,7 +206,7 @@ export default function InviteStep() {
                   }}
                   className="min-h-[52px] rounded-full bg-raspberry font-semibold text-white shadow-soft hover:bg-raspberry-dark"
                 >
-                  Okay fine 💗
+                  Thôi được 💗
                 </button>
                 <button
                   type="button"
@@ -216,7 +216,7 @@ export default function InviteStep() {
                   }}
                   className="min-h-[48px] rounded-full border border-[#E5CBD6] font-medium text-muted hover:text-raspberry"
                 >
-                  I still mean no
+                  Em vẫn muốn từ chối
                 </button>
               </div>
             </motion.div>

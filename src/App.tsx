@@ -1,13 +1,11 @@
 import { AnimatePresence } from "framer-motion";
 import ProgressHearts from "./components/ProgressHearts";
 import StepContainer from "./components/StepContainer";
+import ActivityDetailStep from "./components/steps/ActivityDetailStep";
+import ActivityStep from "./components/steps/ActivityStep";
 import DateTicket from "./components/steps/DateTicket";
 import DateTimeStep from "./components/steps/DateTimeStep";
-import FoodStep from "./components/steps/FoodStep";
 import InviteStep from "./components/steps/InviteStep";
-import ScratchStep from "./components/steps/ScratchStep";
-import ThisOrThatStep from "./components/steps/ThisOrThatStep";
-import VibeStep from "./components/steps/VibeStep";
 import { useDatePlanner } from "./hooks/useDatePlanner";
 import { RouteLink } from "./router";
 import type { Step } from "./types";
@@ -16,16 +14,12 @@ function renderStep(step: Step) {
   switch (step) {
     case "invite":
       return <InviteStep />;
-    case "scratch":
-      return <ScratchStep />;
-    case "vibe":
-      return <VibeStep />;
     case "datetime":
       return <DateTimeStep />;
-    case "thisOrThat":
-      return <ThisOrThatStep />;
-    case "food":
-      return <FoodStep />;
+    case "activity":
+      return <ActivityStep />;
+    case "activityDetail":
+      return <ActivityDetailStep />;
     case "ticket":
       return <DateTicket />;
     default:
@@ -44,7 +38,7 @@ export default function App() {
         <StepContainer key={step}>{renderStep(step)}</StepContainer>
       </AnimatePresence>
       <footer className="pb-6 text-center text-xs text-[#C2ADB7]">
-        made with 💗 in like, an hour
+        làm vội trong một buổi tối, nhưng là làm cho em 💗
         <span className="mx-2 opacity-60">·</span>
         <RouteLink
           to="/love"

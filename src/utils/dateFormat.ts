@@ -1,40 +1,11 @@
-export function getOrdinal(day: number): string {
-  if (day >= 11 && day <= 13) return `${day}th`;
-  switch (day % 10) {
-    case 1:
-      return `${day}st`;
-    case 2:
-      return `${day}nd`;
-    case 3:
-      return `${day}rd`;
-    default:
-      return `${day}th`;
-  }
-}
-
 const WEEKDAYS = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-];
-
-const MONTHS = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
+  "Chủ Nhật",
+  "Thứ Hai",
+  "Thứ Ba",
+  "Thứ Tư",
+  "Thứ Năm",
+  "Thứ Sáu",
+  "Thứ Bảy",
 ];
 
 export function parseLocalDate(dateStr: string): Date | null {
@@ -52,31 +23,25 @@ export function parseLocalDate(dateStr: string): Date | null {
   return date;
 }
 
+/** "2026-10-25" → "Thứ Bảy, 25 tháng 10, 2026" */
 export function formatReadableDate(dateStr: string): string {
   const date = parseLocalDate(dateStr);
   if (!date) return dateStr;
-  const weekday = WEEKDAYS[date.getDay()];
-  const month = MONTHS[date.getMonth()];
-  return `${weekday}, ${month} ${getOrdinal(date.getDate())}, ${date.getFullYear()}`;
+  return `${WEEKDAYS[date.getDay()]}, ${date.getDate()} tháng ${date.getMonth() + 1}, ${date.getFullYear()}`;
 }
 
+/** "2026-10-25" → "Thứ Bảy, 25/10" */
 export function formatShortDate(dateStr: string): string {
   const date = parseLocalDate(dateStr);
   if (!date) return dateStr;
-  const weekday = WEEKDAYS[date.getDay()];
-  const month = MONTHS[date.getMonth()];
-  return `${weekday}, ${month} ${getOrdinal(date.getDate())}`;
+  return `${WEEKDAYS[date.getDay()]}, ${date.getDate()}/${date.getMonth() + 1}`;
 }
 
+/** Giữ nguyên định dạng 24 giờ — người Việt đọc "19:00" tự nhiên hơn "7:00 PM". */
 export function formatTime(timeStr: string): string {
   const match = /^(\d{2}):(\d{2})$/.exec(timeStr);
   if (!match) return timeStr;
-  let hours = Number(match[1]);
-  const minutes = match[2];
-  const suffix = hours >= 12 ? "PM" : "AM";
-  hours = hours % 12;
-  if (hours === 0) hours = 12;
-  return `${hours}:${minutes} ${suffix}`;
+  return `${match[1]}:${match[2]}`;
 }
 
 /**
@@ -104,26 +69,26 @@ export function combineDateTimeLocal(dateStr: string, timeStr: string): Date | n
 
 export function generateTicketNumber(dateStr: string): string {
   const date = parseLocalDate(dateStr);
-  if (!date) return "DATE-000000";
+  if (!date) return "HEN-000000";
   const dd = String(date.getDate()).padStart(2, "0");
   const mm = String(date.getMonth() + 1).padStart(2, "0");
   const yy = String(date.getFullYear()).slice(2);
-  return `DATE-${dd}${mm}${yy}`;
+  return `HEN-${dd}${mm}${yy}`;
 }
 
 export function timeNote(timeStr: string): string {
   switch (timeStr) {
     case "17:00":
-      return "early dinner energy. respectable behavior detected.";
+      return "ăn sớm xong còn kịp đi dạo một vòng.";
     case "18:00":
-      return "6:00 PM, got it. elite choice.";
+      return "giờ này là chuẩn nhất, em chọn đúng rồi.";
     case "19:00":
-      return "prime dinner territory. excellent decision.";
+      return "bữa tối chính thức. anh đói sẵn rồi.";
     case "20:00":
-      return "fashionably late dinner. i respect it.";
+      return "hơi muộn một chút nhưng anh đợi được.";
     case "21:00":
-      return "night mode activated 🌙";
+      return "ăn khuya cũng là ăn 🌙";
     default:
-      return "locked in. no take-backs.";
+      return "chốt rồi nhé, không đổi nữa đâu.";
   }
 }

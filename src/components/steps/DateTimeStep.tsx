@@ -12,14 +12,12 @@ export default function DateTimeStep() {
 
   return (
     <div className="flex min-h-[68dvh] flex-col items-center justify-center">
-      <p className="text-xs font-semibold uppercase tracking-[0.28em] text-blush">step 04 — lock it in</p>
-      <h2 className="mt-2 text-center font-display text-4xl text-ink sm:text-5xl">
-        So… when are you free?
-      </h2>
+      <p className="text-xs font-semibold uppercase tracking-[0.28em] text-blush">bước 1 — ngày và giờ</p>
+      <h2 className="mt-2 text-center font-display text-4xl text-ink sm:text-5xl">Em rảnh hôm nào?</h2>
 
       <div className="mt-8 w-full rounded-3xl border border-[#F3E6EC] bg-white p-5 shadow-card sm:p-7">
         <label htmlFor="date-pick" className="font-display text-2xl italic text-ink">
-          Pick a Day ✨
+          Chọn ngày ✨
         </label>
         <input
           id="date-pick"
@@ -31,12 +29,12 @@ export default function DateTimeStep() {
         />
         {plan.date && !dateValid && (
           <p className="mt-2 text-sm text-raspberry" role="alert">
-            that day already happened — pick something in the future 🥺
+            ngày đó qua rồi — chọn ngày sau đi em 🥺
           </p>
         )}
 
-        <p className="mt-7 font-display text-2xl italic text-ink">What time? 🥺</p>
-        <div className="mt-3 grid grid-cols-1 gap-2" role="radiogroup" aria-label="Time">
+        <p className="mt-7 font-display text-2xl italic text-ink">Mấy giờ nhỉ? 🥺</p>
+        <div className="mt-3 grid grid-cols-1 gap-2" role="radiogroup" aria-label="Giờ hẹn">
           {TIME_OPTIONS.map((t) => {
             const active = plan.time === t.value;
             return (
@@ -74,7 +72,7 @@ export default function DateTimeStep() {
             animate={{ opacity: 1 }}
             className="mt-5 rounded-2xl bg-raspberry-soft/60 px-4 py-3 text-center font-medium text-raspberry"
           >
-            {formatReadableDate(plan.date)} at {formatTime(plan.time)} 💗
+            {formatReadableDate(plan.date)} lúc {formatTime(plan.time)} 💗
           </motion.p>
         )}
       </div>
@@ -85,7 +83,7 @@ export default function DateTimeStep() {
           onClick={back}
           className="min-h-[48px] rounded-full px-5 font-medium text-muted hover:text-raspberry"
         >
-          ← back
+          ← quay lại
         </button>
         <button
           type="button"
@@ -93,7 +91,7 @@ export default function DateTimeStep() {
           disabled={!ready}
           className="min-h-[52px] rounded-full bg-raspberry px-8 font-semibold text-white shadow-soft hover:bg-raspberry-dark disabled:cursor-not-allowed disabled:opacity-40"
         >
-          okay next →
+          tiếp →
         </button>
       </div>
     </div>

@@ -12,7 +12,7 @@ const TITLES: Record<string, string> = {
   "/": LOVE_TITLE,
   "/love": LOVE_TITLE,
   "/meomeo1": "nghỉ tay một chút đi 💌",
-  "/date": "Will You Go On A Date With Me? 💖",
+  "/date": "Hẹn hò với anh nhé? 💖",
 };
 
 function NotFound() {
@@ -38,9 +38,9 @@ export default function Root() {
 
   useEffect(() => {
     document.title = TITLES[path] ?? "hmm... 🤔";
-    // Chỉ Date Planner là tiếng Anh. Khai báo đúng để trình duyệt chọn font dự
+    // Toàn bộ app giờ là tiếng Việt — khai báo đúng để trình duyệt chọn font dự
     // phòng hợp lý và screen reader phát âm chuẩn.
-    document.documentElement.lang = path === "/date" ? "en" : "vi";
+    document.documentElement.lang = "vi";
   }, [path]);
 
   return (

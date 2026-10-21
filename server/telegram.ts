@@ -7,105 +7,74 @@ export function escapeTelegramHtml(value: string): string {
     .replace(/>/g, "&gt;");
 }
 
-const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-const MONTHS = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December",
-];
-
-function ordinal(day: number): string {
-  if (day >= 11 && day <= 13) return `${day}th`;
-  switch (day % 10) {
-    case 1: return `${day}st`;
-    case 2: return `${day}nd`;
-    case 3: return `${day}rd`;
-    default: return `${day}th`;
-  }
-}
+const WEEKDAYS = ["Chủ Nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"];
 
 function readableDate(dateStr: string): string {
   const [y, m, d] = dateStr.split("-").map(Number);
   const date = new Date(y, m - 1, d);
-  return `${WEEKDAYS[date.getDay()]}, ${MONTHS[date.getMonth()]} ${ordinal(date.getDate())}, ${date.getFullYear()}`;
+  return `${WEEKDAYS[date.getDay()]}, ${date.getDate()} tháng ${date.getMonth() + 1}, ${date.getFullYear()}`;
 }
 
 function readableTime(timeStr: string): string {
-  const [h, min] = timeStr.split(":").map(Number);
-  const suffix = h >= 12 ? "PM" : "AM";
-  const hour = h % 12 === 0 ? 12 : h % 12;
-  return `${hour}:${String(min).padStart(2, "0")} ${suffix}`;
+  const match = /^(\d{2}):(\d{2})$/.exec(timeStr);
+  return match ? `${match[1]}:${match[2]}` : timeStr;
 }
 
-const VIBE_LABEL: Record<string, string> = {
-  cozy: "Cozy ☕",
-  fancy: "Fancy ✨",
-  adventure: "Adventure 🌿",
-  chaotic: "Chaotic 😈",
-  foodie: "Food Coma 🍜",
+const ACTIVITY_LABEL: Record<string, string> = {
+  eat: "Đi ăn 🍜",
+  movie: "Xem phim 🎬",
+  walk: "Đi dạo 🚶",
+  cafe: "Đi cafe ☕",
+  cook: "Tự nấu 🍳",
+  meet: "Chỉ cần gặp anh 💞",
 };
 
-const FOOD_EMOJI: Record<string, string> = {
-  Pizza: "🍕",
-  Sushi: "🍣",
-  Burgers: "🍔",
-  Pasta: "🍝",
-  Tacos: "🌮",
-  Ramen: "🍜",
+const DETAIL_LABEL: Record<string, string> = {
+  eat: "Món muốn ăn",
+  movie: "Phim muốn xem",
+  cafe: "Quán muốn đi",
 };
-
-const DRINK_LABEL: Record<string, string> = { coffee: "Coffee ☕", fancy: "Something fancy 🍸" };
-const TOD_LABEL: Record<string, string> = { sunset: "Sunset 🌅", night: "Night 🌙" };
-const ACT_LABEL: Record<string, string> = { walk: "Walk around 🚶", cozy: "Sit somewhere cozy 🛋️" };
 
 function submittedNow(): string {
   const now = new Date();
-  const day = ordinal(now.getDate());
-  const month = MONTHS[now.getMonth()];
-  let h = now.getHours();
-  const suffix = h >= 12 ? "PM" : "AM";
-  h = h % 12 === 0 ? 12 : h % 12;
+  const h = String(now.getHours()).padStart(2, "0");
   const min = String(now.getMinutes()).padStart(2, "0");
-  return `${day} ${month} ${now.getFullYear()}, ${h}:${min} ${suffix}`;
+  return `${now.getDate()} tháng ${now.getMonth() + 1} ${now.getFullYear()}, ${h}:${min}`;
 }
 
 export function buildTelegramMessage(plan: SanitizedPlan): string {
-  const name = escapeTelegramHtml(plan.recipientName || "My date 💖");
+  const name = escapeTelegramHtml(plan.recipientName || "em 💖");
   const date = escapeTelegramHtml(readableDate(plan.date));
   const time = escapeTelegramHtml(readableTime(plan.time));
-  const vibe = escapeTelegramHtml(VIBE_LABEL[plan.vibe] ?? plan.vibe);
-  const foods = plan.foods
-    .map((f) => escapeTelegramHtml(`${f} ${FOOD_EMOJI[f] ?? ""}`.trim()))
-    .join("\n");
-  const drink = escapeTelegramHtml(DRINK_LABEL[plan.answers.drink] ?? plan.answers.drink);
-  const tod = escapeTelegramHtml(TOD_LABEL[plan.answers.timeOfDay] ?? plan.answers.timeOfDay);
-  const act = escapeTelegramHtml(ACT_LABEL[plan.answers.activity] ?? plan.answers.activity);
-  const result = plan.compatibilityResult
-    ? escapeTelegramHtml(plan.compatibilityResult)
-    : "Compatible enough to try 💗";
+  const activity = escapeTelegramHtml(ACTIVITY_LABEL[plan.activity] ?? plan.activity);
 
-  return [
-    `💌 <b>DATE CONFIRMED!</b>`,
+  const lines = [
+    `💌 <b>HẸN HÒ ĐÃ CHỐT!</b>`,
     ``,
-    `Someone just finished the Date Planner 💖`,
+    `Em vừa chốt buổi hẹn với anh 💖`,
     ``,
-    `👤 <b>For:</b> ${name}`,
+    `👤 <b>Dành cho:</b> ${name}`,
     ``,
-    `📅 <b>Date:</b> ${date}`,
+    `📅 <b>Ngày:</b> ${date}`,
     ``,
-    `🕕 <b>Time:</b> ${time}`,
+    `🕗 <b>Giờ:</b> ${time}`,
     ``,
-    `✨ <b>Vibe:</b> ${vibe}`,
-    ``,
-    `🍽 <b>Food:</b>\n${foods}`,
-    ``,
-    `🧪 <b>Important research:</b>\nDrink: ${drink}\nTime: ${tod}\nActivity: ${act}`,
-    ``,
-    `💘 <b>Result:</b> ${result}`,
+    `🎯 <b>Hoạt động:</b> ${activity}`,
+  ];
+
+  if (plan.activityDetail) {
+    const label = DETAIL_LABEL[plan.activity] ?? "Ghi chú";
+    lines.push(``, `📝 <b>${escapeTelegramHtml(label)}:</b> ${escapeTelegramHtml(plan.activityDetail)}`);
+  }
+
+  lines.push(
     ``,
     `────────────────`,
-    `✅ Status: CONFIRMED`,
-    `⏰ Submitted: ${escapeTelegramHtml(submittedNow())}`,
-  ].join("\n");
+    `✅ Trạng thái: ĐÃ CHỐT`,
+    `⏰ Gửi lúc: ${escapeTelegramHtml(submittedNow())}`
+  );
+
+  return lines.join("\n");
 }
 
 export function buildLoveVisitMessage(days?: number): string {

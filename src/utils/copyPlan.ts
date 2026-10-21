@@ -1,21 +1,19 @@
-import { FOODS } from "../config";
+import { findActivity } from "../config";
 import type { DatePlan } from "../types";
 import { formatReadableDate, formatTime } from "./dateFormat";
 
-function foodEmoji(name: string): string {
-  return FOODS.find((f) => f.name === name)?.emoji ?? "";
-}
-
 export function buildCopiedPlan(plan: DatePlan): string {
-  const name = plan.recipientName?.trim() || "you";
-  const date = plan.date ? formatReadableDate(plan.date) : "someday";
-  const time = plan.time ? formatTime(plan.time) : "some time";
-  const foods =
-    plan.foods.length > 0
-      ? plan.foods.map((f) => `${f} ${foodEmoji(f)}`.trim()).join(", ")
-      : "something delicious";
-  const vibe = plan.vibe ? plan.vibe : "perfect";
-  return `It's a date! 💖\n\n${date} at ${time}\nFor: ${name}\nVibe: ${vibe}\nFood: ${foods}\n\nSee you then 🥰`;
+  const name = plan.recipientName?.trim() || "em";
+  const date = plan.date ? formatReadableDate(plan.date) : "một ngày nào đó";
+  const time = plan.time ? formatTime(plan.time) : "giờ nào cũng được";
+  const activity = findActivity(plan.activity);
+  const activityLine = activity ? `${activity.emoji} ${activity.title}` : "—";
+  const detail = plan.activityDetail?.trim();
+
+  const lines = [`Hẹn hò chốt kèo 💖`, ``, `${date} lúc ${time}`, `Dành cho: ${name}`, `Mình sẽ: ${activityLine}`];
+  if (detail) lines.push(`${activity?.detailLabel ?? "Ghi chú"}: ${detail}`);
+  lines.push(``, `Hẹn gặp em hôm đó 🥰`);
+  return lines.join("\n");
 }
 
 async function fallbackCopy(text: string): Promise<boolean> {

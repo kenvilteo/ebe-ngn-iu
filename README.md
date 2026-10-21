@@ -1,8 +1,9 @@
-# 💌 Date Planner — Will You Go On A Date With Me?
+# 💌 Date Planner — Em có muốn đi hẹn hò với anh không?
 
-A playful, romantic mini-experience you send to your partner as a private link:
+A playful, romantic mini-experience you send to your partner as a private link. The whole flow is
+in Vietnamese:
 
-**Invitation → playful Yes/No → scratch card → vibe → date & time → This-or-That game → food → Date Ticket → confirm → Telegram notification → countdown**
+**Lời mời + Yes/No → chọn ngày & giờ → chọn hoạt động (đi ăn / xem phim / cafe / đi dạo / tự nấu / chỉ cần gặp anh) → (ghi món / phim / quán nếu cần) → vé hẹn hò → chốt → thông báo Telegram → đếm ngược**
 
 Takes about 1–2 minutes. Built to feel like a tiny handmade gift, not a SaaS form.
 
@@ -98,8 +99,10 @@ Option B — the real thing: walk through the app and hit **Confirm our date �
 All the content lives in `src/config.ts`:
 
 - `senderName` / `recipientName` (recipient name also appears in the invite heading)
-- Feature flags: scratch card, vibe step, This-or-That, roulette, countdown, easter egg
-- Vibes, foods, time options, compatibility results
+- Feature flags: countdown, easter egg, No-button game
+- `ACTIVITIES` — danh sách hoạt động; hoạt động nào có `detailLabel` thì tự sinh thêm bước hỏi
+  món / phim / quán
+- `TIME_OPTIONS` và toàn bộ copy tiếng Việt của từng bước
 
 ## Trang `/love` — trang kỷ niệm
 
@@ -168,7 +171,7 @@ src/
     FloatingHearts.tsx     # ambient background hearts
     Countdown.tsx          # post-confirmation countdown
     TimeUnit.tsx           # shared countdown digit box
-    steps/                 # Invite, Scratch, Vibe, DateTime, ThisOrThat, Food, DateTicket
+    steps/                 # Invite, DateTime, Activity, ActivityDetail, DateTicket
     love/                  # DaysCounter, NextMilestone, Timeline, LoveNoteForm
     encourage/             # EncouragementCard
   hooks/                   # useDatePlanner, useCountdown, useNow, useVisitNotify, useLocalStorage
@@ -230,7 +233,7 @@ Date Planner's saved state just because she opened another page.
 |---|---|---|
 | GET | `/api/health` | liveness |
 | POST | `/api/date-event` | no-op accept hook (kept for `notifyOnAccept`) |
-| POST | `/api/submit-date` | 5 req / 10 min. `400 INVALID_PAYLOAD` / `NOT_ACCEPTED` / `INVALID_*`, `429 RATE_LIMITED`, `500 NOT_CONFIGURED`, `502 SEND_FAILED` |
+| POST | `/api/submit-date` | 5 req / 10 min. `{ plan: { accepted, recipientName?, date, time, activity, activityDetail? } }`. `400 INVALID_PAYLOAD` / `NOT_ACCEPTED` / `INVALID_DATE` / `INVALID_TIME` / `INVALID_ACTIVITY` / `INVALID_DETAIL`, `429 RATE_LIMITED`, `500 NOT_CONFIGURED`, `502 SEND_FAILED` |
 | POST | `/api/love-visit` | `{ clientVisitId, days?, page? }` → `{ ok, sent }`. `page` is `"love"` (default) or `"encourage"`; the once-a-day guard is keyed per page. Never errors the UI — a failed send still returns `200`. |
 | POST | `/api/love-message` | `{ message, clientMessageId }`, message ≤ 300 chars. `400 EMPTY_MESSAGE` / `MESSAGE_TOO_LONG` / `INVALID_PAYLOAD`, `429`, `500`, `502` |
 | POST | `/api/test-telegram` | dev only |

@@ -1,58 +1,33 @@
-export type VibeKey = "cozy" | "fancy" | "adventure" | "chaotic" | "foodie";
+/** Buổi hẹn làm gì — quyết định cả bước nhập thêm phía sau. */
+export type ActivityKey = "eat" | "movie" | "walk" | "cafe" | "cook" | "meet";
 
 export interface DatePlan {
   accepted: boolean;
   recipientName?: string;
-  vibe: VibeKey | null;
   date: string;
   time: string;
-  answers: {
-    drink?: string;
-    timeOfDay?: string;
-    activity?: string;
-  };
-  compatibilityResult?: string;
-  foods: string[];
+  activity: ActivityKey | null;
+  /** Món muốn ăn / phim muốn xem / quán muốn đi. Rỗng với hoạt động không cần. */
+  activityDetail?: string;
   completedAt?: string;
 }
 
-export type Step =
-  | "invite"
-  | "scratch"
-  | "vibe"
-  | "datetime"
-  | "thisOrThat"
-  | "food"
-  | "ticket";
+export type Step = "invite" | "datetime" | "activity" | "activityDetail" | "ticket";
 
-export interface VibeOption {
-  key: VibeKey;
+export interface ActivityOption {
+  key: ActivityKey;
   emoji: string;
   title: string;
   description: string;
-}
-
-export interface FoodOption {
-  name: string;
-  emoji: string;
+  /** Chỉ có ở hoạt động cần hỏi thêm (ăn / phim / cafe). */
+  detailLabel?: string;
+  detailPlaceholder?: string;
 }
 
 export interface TimeOption {
   value: string;
   label: string;
   note: string;
-}
-
-export interface ThisOrThatOption {
-  value: string;
-  label: string;
-  emoji: string;
-}
-
-export interface ThisOrThatQuestion {
-  key: "drink" | "timeOfDay" | "activity";
-  optionA: ThisOrThatOption;
-  optionB: ThisOrThatOption;
 }
 
 export interface SubmitDateRequest {
@@ -167,9 +142,8 @@ export interface LoveMessageResponse {
 export const initialPlan: DatePlan = {
   accepted: false,
   recipientName: "",
-  vibe: null,
   date: "",
   time: "",
-  answers: {},
-  foods: [],
+  activity: null,
+  activityDetail: "",
 };

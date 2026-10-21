@@ -1,129 +1,107 @@
 import type {
+  ActivityKey,
+  ActivityOption,
   AnniversaryConfig,
   EncouragementConfig,
-  FoodOption,
-  ThisOrThatQuestion,
+  Step,
   TimeOption,
-  VibeOption,
 } from "./types";
 
 export const CONFIG = {
-  senderName: "Me",
+  senderName: "Anh",
   // Cố định tên người nhận: trang /date là món quà gửi riêng cho em ấy, không
   // phải biểu mẫu chung, nên không hỏi lại tên trên trang đầu.
   recipientName: "ebeNganIu",
 
   enableNoButtonGame: true,
-  enableScratchCard: true,
-  enableVibeStep: true,
-  enableThisOrThat: true,
-  enableFoodRoulette: true,
   enableCountdown: true,
   enableEasterEgg: true,
 
   notifyOnAccept: false,
 
   invitation: {
-    title: "Will you go on a date with me?",
-    secretMessage: "okay fine, you're really cute 💗",
-    secretSubMessage: "you weren't supposed to find this.",
+    title: "Em có muốn đi hẹn hò với anh không?",
+    secretMessage: "thôi được rồi, em dễ thương thật 💗",
+    secretSubMessage: "đáng lẽ em không thấy dòng này đâu.",
   },
 };
 
+/** Chỉ còn lời mời → ngày giờ → hoạt động → (chi tiết) → chốt kèo. */
 export const STEP_ORDER = [
   "invite",
-  "scratch",
-  "vibe",
   "datetime",
-  "thisOrThat",
-  "food",
+  "activity",
+  "activityDetail",
   "ticket",
 ] as const;
 
-export function getActiveSteps(): string[] {
-  const steps: string[] = ["invite"];
-  if (CONFIG.enableScratchCard) steps.push("scratch");
-  if (CONFIG.enableVibeStep) steps.push("vibe");
-  steps.push("datetime");
-  if (CONFIG.enableThisOrThat) steps.push("thisOrThat");
-  steps.push("food");
+export const ACTIVITIES: ActivityOption[] = [
+  {
+    key: "eat",
+    emoji: "🍜",
+    title: "Đi ăn",
+    description: "em chọn món, anh lo phần trả tiền",
+    detailLabel: "Em muốn ăn gì?",
+    detailPlaceholder: "ví dụ: bún bò, sushi, lẩu…",
+  },
+  {
+    key: "movie",
+    emoji: "🎬",
+    title: "Xem phim",
+    description: "phim gì cũng được, miễn là có em",
+    detailLabel: "Mình xem phim gì?",
+    detailPlaceholder: "ví dụ: phim kinh dị, hoạt hình…",
+  },
+  {
+    key: "cafe",
+    emoji: "☕",
+    title: "Đi cafe",
+    description: "ngồi cả buổi cũng không ai đuổi",
+    detailLabel: "Quán nào em muốn đi?",
+    detailPlaceholder: "ví dụ: quán quen, quán mới…",
+  },
+  {
+    key: "walk",
+    emoji: "🚶",
+    title: "Đi dạo",
+    description: "đi đâu cũng được, miễn đừng về sớm",
+  },
+  {
+    key: "cook",
+    emoji: "🍳",
+    title: "Tự nấu",
+    description: "anh nấu, em ngồi chờ (và ăn)",
+  },
+  {
+    key: "meet",
+    emoji: "💞",
+    title: "Chỉ cần gặp anh",
+    description: "không cần làm gì cả, có em là đủ",
+  },
+];
+
+export function findActivity(key: ActivityKey | null): ActivityOption | undefined {
+  return ACTIVITIES.find((a) => a.key === key);
+}
+
+/** Ăn / xem phim / cafe mới cần hỏi thêm một câu. */
+export function needsActivityDetail(key: ActivityKey | null): boolean {
+  return !!findActivity(key)?.detailLabel;
+}
+
+export function getActiveSteps(activity: ActivityKey | null): Step[] {
+  const steps: Step[] = ["invite", "datetime", "activity"];
+  if (needsActivityDetail(activity)) steps.push("activityDetail");
   steps.push("ticket");
   return steps;
 }
 
-export const VIBES: VibeOption[] = [
-  {
-    key: "cozy",
-    emoji: "☕",
-    title: "COZY",
-    description: "good food, comfy clothes, zero stress",
-  },
-  {
-    key: "fancy",
-    emoji: "✨",
-    title: "FANCY",
-    description: "dress nice. pretend we're sophisticated.",
-  },
-  {
-    key: "adventure",
-    emoji: "🌿",
-    title: "ADVENTURE",
-    description: "we'll figure it out on the way",
-  },
-  {
-    key: "chaotic",
-    emoji: "😈",
-    title: "CHAOTIC",
-    description: "questionable decisions encouraged",
-  },
-  {
-    key: "foodie",
-    emoji: "🍜",
-    title: "FOOD COMA",
-    description: "the meal is the main event",
-  },
-];
-
 export const TIME_OPTIONS: TimeOption[] = [
-  { value: "17:00", label: "5:00 PM", note: "we eating with the retirees" },
-  { value: "18:00", label: "6:00 PM", note: "this is the right answer tbh" },
-  { value: "19:00", label: "7:00 PM", note: "you're making me hungry already" },
-  { value: "20:00", label: "8:00 PM", note: "we eating dinner or breakfast?" },
-  { value: "21:00", label: "9:00 PM", note: "late night fun fun 🌙" },
-];
-
-export const FOODS: FoodOption[] = [
-  { name: "Pizza", emoji: "🍕" },
-  { name: "Sushi", emoji: "🍣" },
-  { name: "Burgers", emoji: "🍔" },
-  { name: "Pasta", emoji: "🍝" },
-  { name: "Tacos", emoji: "🌮" },
-  { name: "Ramen", emoji: "🍜" },
-];
-
-export const THIS_OR_THAT: ThisOrThatQuestion[] = [
-  {
-    key: "drink",
-    optionA: { value: "coffee", label: "Coffee", emoji: "☕" },
-    optionB: { value: "fancy", label: "Something fancy", emoji: "🍸" },
-  },
-  {
-    key: "timeOfDay",
-    optionA: { value: "sunset", label: "Sunset", emoji: "🌅" },
-    optionB: { value: "night", label: "Night", emoji: "🌙" },
-  },
-  {
-    key: "activity",
-    optionA: { value: "walk", label: "Walk around", emoji: "🚶" },
-    optionB: { value: "cozy", label: "Sit somewhere cozy", emoji: "🛋️" },
-  },
-];
-
-export const COMPATIBILITY_RESULTS = [
-  "Certified cozy date person ☕",
-  "87% likely to turn dinner into a 4-hour conversation.",
-  "Dangerously compatible 💘",
-  "Studies conducted by me confirm this was the correct decision.",
+  { value: "17:00", label: "17:00", note: "ăn sớm cho kịp đi dạo" },
+  { value: "18:00", label: "18:00", note: "giờ đẹp nhất để hẹn" },
+  { value: "19:00", label: "19:00", note: "chuẩn bữa tối, anh đói rồi" },
+  { value: "20:00", label: "20:00", note: "hơi muộn nhưng vẫn kịp" },
+  { value: "21:00", label: "21:00", note: "ăn khuya cũng là ăn 🌙" },
 ];
 
 export const STORAGE_KEYS = {
@@ -238,12 +216,12 @@ export const ENCOURAGE_STORAGE_KEYS = {
 } as const;
 
 export const NO_BUTTON_TEXTS = [
-  "No",
-  "Are you sure? 🥺",
-  "Really?? 👀",
-  "Wrong answer 😭",
-  "Think carefully...",
-  "Fine. Try again 😂",
+  "Không",
+  "Chắc chưa? 🥺",
+  "Thiệt luôn? 👀",
+  "Sai rồi 😭",
+  "Nghĩ lại đi...",
+  "Thôi, bấm lại đi 😂",
 ];
 
 export const MAX_NO_ATTEMPTS = 5;

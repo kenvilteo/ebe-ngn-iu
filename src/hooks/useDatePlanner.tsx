@@ -70,19 +70,28 @@ function nextStepName(steps: string[], current: Step): Step {
 }
 
 export function DatePlannerProvider({ children }: { children: ReactNode }) {
-  const activeSteps = useMemo(() => getActiveSteps(), []);
   const seeded = useRef<PersistedState | null | undefined>(undefined);
   if (seeded.current === undefined) {
     seeded.current = typeof window === "undefined" ? null : loadPersisted();
   }
 
+  const [plan, setPlanState] = useState<DatePlan>(() =>
+    withTodayDefault({ ...(seeded.current?.plan ?? initialPlan), recipientName: CONFIG.recipientName })
+  );
+
+  // Bước "ghi món / phim / quán" chỉ tồn tại khi hoạt động đã chọn cần hỏi thêm,
+  // nên danh sách bước phải tính lại mỗi khi hoạt động đổi.
+  const activeSteps = useMemo(() => getActiveSteps(plan.activity), [plan.activity]);
+
   const [step, setStep] = useState<Step>(() => {
     const s = seeded.current?.step ?? "invite";
     return (activeSteps.includes(s) ? s : "invite") as Step;
   });
-  const [plan, setPlanState] = useState<DatePlan>(() =>
-    withTodayDefault({ ...(seeded.current?.plan ?? initialPlan), recipientName: CONFIG.recipientName })
-  );
+
+  useEffect(() => {
+    // Đổi sang hoạt động không cần chi tiết trong lúc đang đứng ở bước chi tiết.
+    if (!activeSteps.includes(step)) setStep("activity");
+  }, [activeSteps, step]);
 
   useEffect(() => {
     persist(step, plan);

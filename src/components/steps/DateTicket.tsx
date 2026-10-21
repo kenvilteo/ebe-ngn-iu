@@ -2,7 +2,7 @@ import confetti from "canvas-confetti";
 import { AnimatePresence, motion } from "framer-motion";
 import { Check, Copy, Heart, Loader2, RotateCcw } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { CONFIG, FOODS, STORAGE_KEYS, VIBES } from "../../config";
+import { CONFIG, findActivity, STORAGE_KEYS } from "../../config";
 import { submitDate } from "../../api/submitDate";
 import { useDatePlanner } from "../../hooks/useDatePlanner";
 import { buildCopiedPlan, copyText } from "../../utils/copyPlan";
@@ -44,21 +44,17 @@ function readJson<T>(key: string): T | null {
 
 function planSignature(plan: {
   recipientName?: string;
-  vibe: string | null;
   date: string;
   time: string;
-  answers: { drink?: string; timeOfDay?: string; activity?: string };
-  compatibilityResult?: string;
-  foods: string[];
+  activity: string | null;
+  activityDetail?: string;
 }): string {
   return JSON.stringify({
     recipientName: plan.recipientName?.trim() ?? "",
-    vibe: plan.vibe,
     date: plan.date,
     time: plan.time,
-    answers: plan.answers,
-    compatibilityResult: plan.compatibilityResult ?? "",
-    foods: [...plan.foods].sort(),
+    activity: plan.activity ?? "",
+    activityDetail: plan.activityDetail?.trim() ?? "",
   });
 }
 
@@ -101,10 +97,11 @@ export default function DateTicket() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const vibe = VIBES.find((v) => v.key === plan.vibe);
+  const activity = findActivity(plan.activity);
+  const detail = plan.activityDetail?.trim();
   const ticketNo = useMemo(() => generateTicketNumber(plan.date), [plan.date]);
   const note = timeNote(plan.time);
-  const recipient = plan.recipientName?.trim() || "You";
+  const recipient = plan.recipientName?.trim() || "em";
 
   const confirm = async () => {
     if (status === "sending" || status === "done") return;
@@ -127,10 +124,10 @@ export default function DateTicket() {
       setStatus("error");
       setErrorMsg(
         res.error === "RATE_LIMITED"
-          ? "Whoa, slow down lover. Too many tries — wait a few minutes? 💗"
+          ? "Từ từ thôi em, bấm nhiều quá rồi. Chờ vài phút nhé 💗"
           : res.error === "NETWORK_ERROR"
-            ? "You're offline, cutie. Check your connection and try again."
-            : "Telegram is being dramatic. Try again?"
+            ? "Mất mạng rồi em ơi. Kiểm tra kết nối rồi thử lại nhé."
+            : "Telegram đang dỗi. Thử lại giúp anh nhé?"
       );
     }
   };
@@ -145,12 +142,8 @@ export default function DateTicket() {
 
   return (
     <div className="flex min-h-[68dvh] flex-col items-center">
-      <p className="text-xs font-semibold uppercase tracking-[0.28em] text-blush">
-        step 07 — the payoff
-      </p>
-      <h2 className="mt-2 text-center font-display text-4xl text-ink sm:text-5xl">
-        It&apos;s a date! 💌
-      </h2>
+      <p className="text-xs font-semibold uppercase tracking-[0.28em] text-blush">bước cuối — chốt kèo</p>
+      <h2 className="mt-2 text-center font-display text-4xl text-ink sm:text-5xl">Chốt nhé! 💌</h2>
       <p className="mt-2 text-center italic text-muted">{note}</p>
 
       <motion.div
@@ -160,50 +153,43 @@ export default function DateTicket() {
         className="paper-texture mt-7 w-full overflow-hidden rounded-[26px] border border-[#F0E2E8] bg-white shadow-card-hover"
       >
         <div className="bg-raspberry px-6 py-4 text-center">
-          <p className="text-xs font-bold uppercase tracking-[0.32em] text-white/85">
-            date night pass
-          </p>
+          <p className="text-xs font-bold uppercase tracking-[0.32em] text-white/85">vé hẹn hò</p>
         </div>
 
         <div className="px-6 py-6 sm:px-8">
           <div className="grid grid-cols-2 gap-x-4 gap-y-5">
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted">for</p>
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted">dành cho</p>
               <p className="mt-1 font-display text-2xl text-ink">{recipient}</p>
             </div>
             <div className="text-right">
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted">vibe</p>
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted">hoạt động</p>
               <p className="mt-1 text-lg font-bold text-ink">
-                {vibe ? `${vibe.title} ${vibe.emoji}` : "—"}
+                {activity ? `${activity.emoji} ${activity.title}` : "—"}
               </p>
             </div>
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted">date</p>
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted">ngày</p>
               <p className="mt-1 font-semibold text-ink">
                 {plan.date ? formatReadableDate(plan.date) : "—"}
               </p>
             </div>
             <div className="text-right">
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted">time</p>
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted">giờ</p>
               <p className="mt-1 font-semibold text-ink">
                 {plan.time ? formatTime(plan.time) : "—"}
               </p>
             </div>
           </div>
 
-          <div className="mt-5">
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted">food</p>
-            <div className="mt-2 flex flex-wrap gap-2">
-              {plan.foods.map((f) => (
-                <span
-                  key={f}
-                  className="rounded-full bg-raspberry-soft px-3 py-1.5 text-sm font-semibold text-raspberry"
-                >
-                  {FOODS.find((x) => x.name === f)?.emoji} {f}
-                </span>
-              ))}
+          {activity?.detailLabel && (
+            <div className="mt-5">
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted">
+                {activity.detailLabel}
+              </p>
+              <p className="mt-1 text-lg font-semibold text-ink">{detail || "—"}</p>
             </div>
-          </div>
+          )}
 
           <div className="relative my-6 flex items-center">
             <span className="ticket-notch absolute -left-[38px] sm:-left-[44px]" aria-hidden="true" />
@@ -213,21 +199,21 @@ export default function DateTicket() {
 
           <div className="flex items-center justify-between gap-3">
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted">status</p>
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted">trạng thái</p>
               <p className="mt-1 font-bold text-ink">
                 {status === "done" ? (
                   <span className="inline-flex items-center gap-1.5 text-raspberry">
-                    <Heart size={16} className="fill-raspberry" /> CONFIRMED 💖
+                    <Heart size={16} className="fill-raspberry" /> ĐÃ CHỐT 💖
                   </span>
                 ) : (
-                  "READY TO CONFIRM 💖"
+                  "SẴN SÀNG CHỐT 💖"
                 )}
               </p>
             </div>
             <div className="text-right">
               <div
                 className="font-mono text-sm tracking-[0.3em] text-muted"
-                aria-label="decorative ticket barcode"
+                aria-label="mã vạch trang trí của vé"
               >
                 {"▌▌▌ ▌ ▌▌ ▌▌▌ ▌"}
               </div>
@@ -240,8 +226,8 @@ export default function DateTicket() {
       <div className="mt-6 w-full">
         {status === "done" ? (
           <div className="rounded-2xl bg-raspberry-soft/70 px-5 py-4 text-center font-semibold text-raspberry">
-            {alreadySubmitted && status === "done" ? "Already confirmed 💖" : "Date confirmed 💖"}
-            <span className="mt-1 block text-sm font-normal">your plan was sent ✨</span>
+            {alreadySubmitted && status === "done" ? "Đã chốt rồi 💖" : "Chốt kèo thành công 💖"}
+            <span className="mt-1 block text-sm font-normal">kế hoạch đã được gửi đi ✨</span>
           </div>
         ) : (
           <button
@@ -253,10 +239,10 @@ export default function DateTicket() {
             {status === "sending" ? (
               <>
                 <Loader2 size={20} className="animate-spin" />
-                Sending our plan…
+                Đang gửi…
               </>
             ) : (
-              "Confirm our date 💖"
+              "Chốt buổi hẹn 💖"
             )}
           </button>
         )}
@@ -271,13 +257,13 @@ export default function DateTicket() {
               role="alert"
             >
               <p className="font-medium text-ink">{errorMsg}</p>
-              <p className="mt-1 text-sm text-muted">Your choices are still saved.</p>
+              <p className="mt-1 text-sm text-muted">Lựa chọn của em vẫn được lưu.</p>
               <button
                 type="button"
                 onClick={confirm}
                 className="mt-3 inline-flex min-h-[44px] items-center gap-2 rounded-full bg-raspberry px-6 font-semibold text-white"
               >
-                <Check size={16} /> Try again
+                <Check size={16} /> Thử lại
               </button>
             </motion.div>
           )}
@@ -290,14 +276,14 @@ export default function DateTicket() {
             className="flex min-h-[50px] flex-1 items-center justify-center gap-2 rounded-full border border-[#E5CBD6] bg-white font-semibold text-ink hover:border-blush hover:text-raspberry"
           >
             <Copy size={17} />
-            {copied ? "Copied! 💖" : "Copy our plan"}
+            {copied ? "Đã copy! 💖" : "Sao chép kế hoạch"}
           </button>
           <button
             type="button"
             onClick={back}
             className="min-h-[50px] rounded-full border border-[#E5CBD6] bg-white px-5 font-medium text-muted hover:text-raspberry"
           >
-            ← edit
+            ← sửa
           </button>
         </div>
       </div>
@@ -315,12 +301,12 @@ export default function DateTicket() {
             onClick={() => setConfirmReset(true)}
             className="inline-flex min-h-[44px] items-center gap-1.5 px-4 text-sm text-[#B9A6B0] hover:text-raspberry"
           >
-            <RotateCcw size={14} /> start over
+            <RotateCcw size={14} /> làm lại từ đầu
           </button>
         ) : (
           <div className="rounded-2xl border border-[#EDD7DF] bg-white px-5 py-4">
             <p className="text-sm text-muted">
-              start over? this only resets this browser — the sent plan stays sent 💌
+              làm lại từ đầu? chỉ đặt lại trên trình duyệt này thôi — kế hoạch đã gửi vẫn ở đó 💌
             </p>
             <div className="mt-3 flex justify-center gap-2">
               <button
@@ -331,14 +317,14 @@ export default function DateTicket() {
                 }}
                 className="min-h-[44px] rounded-full bg-raspberry px-5 text-sm font-semibold text-white"
               >
-                yes, reset
+                ừ, làm lại
               </button>
               <button
                 type="button"
                 onClick={() => setConfirmReset(false)}
                 className="min-h-[44px] rounded-full border border-[#E5CBD6] px-5 text-sm font-medium text-muted"
               >
-                keep it
+                giữ nguyên
               </button>
             </div>
           </div>

@@ -33,7 +33,7 @@ export default function ProgressHearts({
       <button
         type="button"
         onClick={handleTap}
-        aria-label="Date planning progress. Tap five times quickly for a surprise."
+        aria-label="Tiến độ chọn buổi hẹn. Bấm nhanh năm lần để xem điều bí mật."
         className="mx-auto flex min-h-[44px] items-center gap-2 rounded-full px-4"
       >
         {progressSteps.map((s, i) => {
@@ -88,7 +88,7 @@ export default function ProgressHearts({
               onClick={() => setShowSecret(false)}
               className="mt-2 min-h-[36px] rounded-full px-4 text-sm font-semibold text-raspberry hover:bg-raspberry-soft"
             >
-              shhh 🤫
+              suỵt 🤫
             </button>
           </motion.div>
         )}

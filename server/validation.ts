@@ -1,42 +1,31 @@
+import type { ActivityKey } from "../src/types";
+
 export interface RawPlan {
   accepted?: unknown;
   recipientName?: unknown;
-  vibe?: unknown;
   date?: unknown;
   time?: unknown;
-  answers?: unknown;
-  compatibilityResult?: unknown;
-  foods?: unknown;
+  activity?: unknown;
+  activityDetail?: unknown;
   completedAt?: unknown;
 }
 
 export interface SanitizedPlan {
   accepted: true;
   recipientName: string;
-  vibe: string;
   date: string;
   time: string;
-  answers: { drink: string; timeOfDay: string; activity: string };
-  compatibilityResult: string;
-  foods: string[];
+  activity: ActivityKey;
+  activityDetail: string;
 }
 
-const VIBES = new Set(["cozy", "fancy", "adventure", "chaotic", "foodie"]);
 const TIMES = new Set(["17:00", "18:00", "19:00", "20:00", "21:00"]);
-const FOODS = new Set(["Pizza", "Sushi", "Burgers", "Pasta", "Tacos", "Ramen"]);
-const DRINKS = new Set(["coffee", "fancy"]);
-const TIMES_OF_DAY = new Set(["sunset", "night"]);
-const ACTIVITIES = new Set(["walk", "cozy"]);
+const ACTIVITIES = new Set<string>(["eat", "movie", "walk", "cafe", "cook", "meet"]);
+/** Chỉ ba hoạt động này mới bắt buộc có câu trả lời thêm. */
+const DETAIL_REQUIRED = new Set(["eat", "movie", "cafe"]);
 
 const MAX_NAME = 50;
-const MAX_GENERIC = 120;
-const MAX_FOOD = 30;
-
-function validCustomFood(name: string): boolean {
-  if (name.length < 2 || name.length > MAX_FOOD) return false;
-  // Letters, numbers, spaces and common food-name punctuation/emoji only.
-  return /^[\p{L}\p{N}\p{Emoji_Presentation}\p{Extended_Pictographic} .,'’\-+&()!]+$/u.test(name);
-}
+const MAX_DETAIL = 60;
 
 function cleanString(value: unknown, max: number): string {
   if (typeof value !== "string") return "";
@@ -71,56 +60,31 @@ export function validatePlan(raw: unknown): { ok: true; plan: SanitizedPlan } | 
 
   if (p.accepted !== true) return { ok: false, error: "NOT_ACCEPTED" };
 
-  const vibe = cleanString(p.vibe, 20);
-  if (!VIBES.has(vibe)) return { ok: false, error: "INVALID_VIBE" };
-
   const date = cleanString(p.date, 10);
   if (!validDate(date)) return { ok: false, error: "INVALID_DATE" };
 
   const time = cleanString(p.time, 5);
   if (!TIMES.has(time)) return { ok: false, error: "INVALID_TIME" };
 
-  if (!Array.isArray(p.foods) || p.foods.length < 1 || p.foods.length > 5) {
-    return { ok: false, error: "INVALID_FOODS" };
-  }
-  const foods: string[] = [];
-  const seenLower = new Set<string>();
-  for (const f of p.foods) {
-    const name = cleanString(f, MAX_FOOD);
-    const lower = name.toLowerCase();
-    if (seenLower.has(lower)) return { ok: false, error: "INVALID_FOODS" };
-    seenLower.add(lower);
-    if (FOODS.has(name)) {
-      foods.push(name);
-    } else if (validCustomFood(name)) {
-      foods.push(name);
-    } else {
-      return { ok: false, error: "INVALID_FOODS" };
-    }
-  }
+  const activity = cleanString(p.activity, 20);
+  if (!ACTIVITIES.has(activity)) return { ok: false, error: "INVALID_ACTIVITY" };
 
-  const answers = (p.answers && typeof p.answers === "object" ? p.answers : {}) as Record<string, unknown>;
-  const drink = cleanString(answers.drink, 20);
-  const timeOfDay = cleanString(answers.timeOfDay, 20);
-  const activity = cleanString(answers.activity, 20);
-  if (!DRINKS.has(drink) || !TIMES_OF_DAY.has(timeOfDay) || !ACTIVITIES.has(activity)) {
-    return { ok: false, error: "INVALID_ANSWERS" };
+  const activityDetail = cleanString(p.activityDetail, MAX_DETAIL);
+  if (DETAIL_REQUIRED.has(activity) && activityDetail.length === 0) {
+    return { ok: false, error: "INVALID_DETAIL" };
   }
 
   const recipientName = cleanString(p.recipientName, MAX_NAME);
-  const compatibilityResult = cleanString(p.compatibilityResult, MAX_GENERIC);
 
   return {
     ok: true,
     plan: {
       accepted: true,
       recipientName,
-      vibe,
       date,
       time,
-      answers: { drink, timeOfDay, activity },
-      compatibilityResult,
-      foods,
+      activity: activity as ActivityKey,
+      activityDetail,
     },
   };
 }
