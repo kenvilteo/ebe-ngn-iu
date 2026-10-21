@@ -1,0 +1,7 @@
+name = "ebe-ngn-iu"
+compatibility_date = "2025-01-01"
+pages_build_output_dir = "dist"
+
+# Secrets KHÔNG khai báo ở đây (file này được commit). Đặt bằng:
+#   npx wrangler pages secret put DATE_PLANNER_TELEGRAM_BOT_TOKEN
+#   npx wrangler pages secret put DATE_PLANNER_TELEGRAM_CHAT_ID

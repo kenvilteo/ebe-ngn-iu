@@ -1,0 +1,3 @@
+# SPA fallback: mọi đường dẫn không phải file tĩnh đều trả index.html.
+# /api/* do Pages Functions xử lý trước khi luật này được áp dụng.
+/* /index.html 200

@@ -182,11 +182,19 @@ src/
     copyPlan.ts            # clipboard copy plan
   config.ts  types.ts  App.tsx  Root.tsx  main.tsx
 server/
-  index.ts                 # Express app + routes
+  index.ts                 # Express app + routes (local / self-hosted)
   telegram.ts              # message builders (HTML-escaped) + sendMessage via fetch
   validation.ts            # strict input validation + sanitization
   rateLimit.ts             # per-group rate limiters, dedupe cache, once-per-day guard
+functions/                 # Cloudflare Pages Functions (production API)
+  api/[[path]].ts          # same routes as server/index.ts, backed by server/validation + telegram
+  _lib/store.ts            # rate limit + dedupe + once-per-day guard (Worker-safe)
+public/_redirects          # SPA fallback for Pages (/* → index.html)
+wrangler.toml              # Pages project config
 ```
+
+The Express server and the Pages Function share `server/validation.ts` and `server/telegram.ts`, so
+the validation rules and Telegram formatting can't drift apart between local and production.
 
 ### Routing
 
@@ -244,3 +252,33 @@ resolves the same way it does in dev.
 > ```powershell
 > $env:NODE_ENV = "production"; npx tsx server/index.ts
 > ```
+
+## Deploy — Cloudflare Pages
+
+The production API runs as a Cloudflare Pages Function, so the static build and the API live on
+one origin and no CORS or separate host is needed.
+
+```bash
+npx wrangler login                 # once
+npx wrangler pages project create ebe-ngn-iu --production-branch main   # once
+npm run build
+npm run deploy                     # wrangler pages deploy (reads wrangler.toml)
+```
+
+Set the Telegram credentials once per project (they are **not** committed):
+
+```bash
+npx wrangler pages secret put DATE_PLANNER_TELEGRAM_BOT_TOKEN --project-name ebe-ngn-iu
+npx wrangler pages secret put DATE_PLANNER_TELEGRAM_CHAT_ID   --project-name ebe-ngn-iu
+```
+
+Local preview of the real Pages runtime (reads `.env` automatically):
+
+```bash
+npm run build && npm run pages:dev
+```
+
+> **Dedupe on Workers:** rate limits and the once-per-day guard live in module memory, which is
+> per-isolate on Cloudflare and discarded when the isolate is recycled. That is fine here because
+> the client already skips the request once per day per device; the server copy is a second line
+> of defense, not a hard guarantee.

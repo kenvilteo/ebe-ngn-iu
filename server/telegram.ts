@@ -155,9 +155,30 @@ export function buildLoveMessage(message: string): string {
   ].join("\n");
 }
 
-export async function sendToTelegram(text: string): Promise<{ ok: boolean; error?: string }> {
-  const token = process.env.DATE_PLANNER_TELEGRAM_BOT_TOKEN;
-  const chatId = process.env.DATE_PLANNER_TELEGRAM_CHAT_ID;
+export interface TelegramCredentials {
+  token?: string;
+  chatId?: string;
+}
+
+/**
+ * Trên Cloudflare Workers không có `process`; đọc phòng thủ để file này dùng
+ * chung được cho cả server Express lẫn Pages Functions.
+ */
+function envCredentials(): TelegramCredentials {
+  if (typeof process === "undefined") return {};
+  return {
+    token: process.env.DATE_PLANNER_TELEGRAM_BOT_TOKEN,
+    chatId: process.env.DATE_PLANNER_TELEGRAM_CHAT_ID,
+  };
+}
+
+export async function sendToTelegram(
+  text: string,
+  credentials?: TelegramCredentials
+): Promise<{ ok: boolean; error?: string }> {
+  const fallback = envCredentials();
+  const token = credentials?.token || fallback.token;
+  const chatId = credentials?.chatId || fallback.chatId;
 
   if (!token || !chatId) {
     console.error("[telegram] Missing DATE_PLANNER_TELEGRAM_BOT_TOKEN or DATE_PLANNER_TELEGRAM_CHAT_ID.");
