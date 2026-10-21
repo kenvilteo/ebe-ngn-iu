@@ -21,7 +21,12 @@ function loadPersisted(): PersistedState | null {
     if (!raw) return null;
     const parsed = JSON.parse(raw) as PersistedState;
     if (!parsed || typeof parsed !== "object" || !parsed.plan) return null;
-    return { step: parsed.step ?? "invite", plan: withTodayDefault({ ...initialPlan, ...parsed.plan }) };
+    // Tên người nhận là hằng số trong CONFIG, nên trạng thái cũ trong localStorage
+    // không được phép ghi đè.
+    return {
+      step: parsed.step ?? "invite",
+      plan: withTodayDefault({ ...initialPlan, ...parsed.plan, recipientName: CONFIG.recipientName }),
+    };
   } catch {
     return null;
   }
@@ -76,7 +81,7 @@ export function DatePlannerProvider({ children }: { children: ReactNode }) {
     return (activeSteps.includes(s) ? s : "invite") as Step;
   });
   const [plan, setPlanState] = useState<DatePlan>(() =>
-    withTodayDefault(seeded.current?.plan ?? initialPlan)
+    withTodayDefault({ ...(seeded.current?.plan ?? initialPlan), recipientName: CONFIG.recipientName })
   );
 
   useEffect(() => {

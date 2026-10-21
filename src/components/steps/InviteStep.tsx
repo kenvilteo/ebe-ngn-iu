@@ -33,18 +33,12 @@ function EnvelopeArt() {
 }
 
 export default function InviteStep() {
-  const { plan, updatePlan, next } = useDatePlanner();
-  const [name, setName] = useState(plan.recipientName ?? CONFIG.recipientName ?? "");
+  const { updatePlan, next } = useDatePlanner();
   const [attempts, setAttempts] = useState(0);
   const [noPos, setNoPos] = useState({ x: 0, y: 0 });
   const [showDenied, setShowDenied] = useState(false);
   const [hardNo, setHardNo] = useState(false);
   const noBtnRef = useRef<HTMLButtonElement>(null);
-
-  const nameError =
-    name.trim().length > 0 && name.trim().length < 2
-      ? "give me at least 2 letters 🥺"
-      : null;
 
   const reducedMotion =
     typeof window !== "undefined" &&
@@ -93,8 +87,7 @@ export default function InviteStep() {
   const yesScale = Math.min(1 + attempts * 0.045, 1.28);
 
   const accept = () => {
-    const clean = name.trim().slice(0, 50);
-    updatePlan({ accepted: true, recipientName: clean });
+    updatePlan({ accepted: true, recipientName: CONFIG.recipientName.trim().slice(0, 50) });
     if (CONFIG.notifyOnAccept) {
       fetch("/api/date-event", {
         method: "POST",
@@ -105,7 +98,7 @@ export default function InviteStep() {
     next();
   };
 
-  const headingName = (plan.recipientName || name.trim() || CONFIG.recipientName || "").trim();
+  const headingName = CONFIG.recipientName.trim();
   const heading = headingName ? `${headingName}, will you go on a date with me?` : CONFIG.invitation.title;
 
   if (hardNo) {
@@ -146,31 +139,10 @@ export default function InviteStep() {
           {heading}
         </h1>
 
-        <div className="mx-auto mt-6 max-w-[320px]">
-          <label htmlFor="recipient-name" className="text-sm font-medium text-muted">
-            your name <span className="opacity-70">(so the ticket says who it&apos;s for)</span>
-          </label>
-          <input
-            id="recipient-name"
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value.slice(0, 50))}
-            placeholder="e.g. Emma"
-            autoComplete="given-name"
-            className="mt-2 min-h-[52px] w-full rounded-2xl border border-[#EBD9E1] bg-white px-5 text-center text-lg text-ink placeholder:text-[#C9B6BF] focus:border-raspberry focus:outline-none"
-          />
-          {nameError && (
-            <p className="mt-1 text-sm text-raspberry" role="alert">
-              {nameError}
-            </p>
-          )}
-        </div>
-
-        <div className="relative mx-auto mt-7 flex min-h-[150px] w-full max-w-[340px] flex-col items-center">
+        <div className="relative mx-auto mt-9 flex min-h-[150px] w-full max-w-[340px] flex-col items-center">
           <motion.button
             type="button"
             onClick={accept}
-            disabled={!!nameError}
             animate={{ scale: yesScale }}
             whileHover={{ scale: Math.min(yesScale + 0.05, 1.34) }}
             whileTap={{ scale: 0.96 }}

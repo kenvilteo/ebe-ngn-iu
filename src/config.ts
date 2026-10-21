@@ -9,7 +9,9 @@ import type {
 
 export const CONFIG = {
   senderName: "Me",
-  recipientName: "",
+  // Cố định tên người nhận: trang /date là món quà gửi riêng cho em ấy, không
+  // phải biểu mẫu chung, nên không hỏi lại tên trên trang đầu.
+  recipientName: "ebeNganIu",
 
   enableNoButtonGame: true,
   enableScratchCard: true,
